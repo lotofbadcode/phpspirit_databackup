@@ -9,7 +9,6 @@ include dirname(__FILE__) . '/../src/mysql/backup.php';
 use phpspirit\databackup\BackupFactory;
 
 //自行判断文件夹
-
 $backupdir = '';
 if (isset($_POST['backdir']) && $_POST['backdir'] != '') {
     $backupdir = $_POST['backdir'];
