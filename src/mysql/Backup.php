@@ -69,6 +69,10 @@ class Backup implements IBackup
 
 
     /**
+     * 是否仅备份结构不备份数据
+     */
+    private $_onlystructure = false;
+    /**
      * 
      * @param string $server 服务器
      * @param string $dbname 数据库
@@ -155,6 +159,23 @@ class Backup implements IBackup
         return $this->_filename;
     }
 
+
+
+    /**
+     * 设置是否仅备份结构
+     */
+    public function setonlystructure($bool)
+    {
+        $this->_onlystructure = $bool;
+        return $this;
+    }
+
+    public function getonlystructure()
+    {
+        return $this->_onlystructure;
+    }
+
+
     /**
      * 备份
      * 
@@ -196,7 +217,9 @@ class Backup implements IBackup
                 $sqlstr .= $res[0][1] . ';' . PHP_EOL;
                 file_put_contents($this->_backdir . DIRECTORY_SEPARATOR . $this->getfilename(), file_get_contents($this->_backdir . DIRECTORY_SEPARATOR . $this->getfilename()) . $sqlstr);
 
-                $this->gettabletotal($nowtable); //当前备份表总条数
+                if ($this->getonlystructure() === false) {
+                    $this->gettabletotal($nowtable); //当前备份表总条数
+                }
             }
 
             if ($this->_nowtableexeccount < $this->_nowtabletotal) {

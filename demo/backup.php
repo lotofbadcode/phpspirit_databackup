@@ -20,8 +20,9 @@ if (isset($_POST['backdir']) && $_POST['backdir'] != '') {
 if (!is_dir($backupdir)) {
     mkdir($backupdir, 0777, true);
 }
-$backup = BackupFactory::instance('mysql', '127.0.0.1:3306', 'test', 'root', 'root');
+$backup = BackupFactory::instance('mysql', '127.0.0.1:3306', 'smes', 'root', 'root');
 $backup->setbackdir($backupdir)
+    ->settablelist(['md_menu','md_api_group'])
     ->setvolsize(0.2);
 do {
     $result = $backup->backup();

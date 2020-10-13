@@ -20,9 +20,11 @@ if (!is_dir($backupdir)) {
     mkdir($backupdir, 0777, true);
 }
 
-$backup = BackupFactory::instance('mysql', '127.0.0.1:3306', 'test', 'root', 'root');
+$backup = BackupFactory::instance('mysql', '127.0.0.1:3306', 'smes', 'root', 'root');
 $result = $backup->setbackdir($backupdir)
     ->setvolsize(0.2)
+    ->setonlystructure(true) //设置是否只备份目录结构
+    ->settablelist(['md_menu', 'md_api_group','cmseasy_b_category']) //设置要备份的表  默认全部表
     ->ajaxbackup($_POST);
 
 echo json_encode($result);
