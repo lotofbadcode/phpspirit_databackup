@@ -80,6 +80,12 @@ class Backup implements IBackup
      * @param string $password 密码
      * @param string $code 编码
      */
+
+    /**
+     * 仅备份数据结构 不备份数据的表
+     */
+    private $_structuretable = [];
+
     public function __construct($pdo)
     {
         $this->_pdo = $pdo;
@@ -177,6 +183,19 @@ class Backup implements IBackup
 
 
     /**
+     * 设置仅备份表结构 不备份数据的表
+     */
+    public function setstructuretable($table = [])
+    {
+        $this->_structuretable = $table;
+        return $this;
+    }
+
+    public function getstructuretable()
+    {
+        return $this->_structuretable;
+    }
+    /**
      * 备份
      * 
      * 正在备份的表
@@ -217,12 +236,13 @@ class Backup implements IBackup
                 $sqlstr .= $res[0][1] . ';' . PHP_EOL;
                 file_put_contents($this->_backdir . DIRECTORY_SEPARATOR . $this->getfilename(), file_get_contents($this->_backdir . DIRECTORY_SEPARATOR . $this->getfilename()) . $sqlstr);
 
-                if ($this->getonlystructure() === false) {
+                if ($this->getonlystructure() === false  && !in_array($nowtable, $this->getstructuretable())) {
                     $this->gettabletotal($nowtable); //当前备份表总条数
                 }
             }
 
             if ($this->_nowtableexeccount < $this->_nowtabletotal) {
+               
                 //建记录SQL语句 并设置已经备份的条数
                 $this->_singleinsertrecord($nowtable, $this->_nowtableexeccount);
             }
