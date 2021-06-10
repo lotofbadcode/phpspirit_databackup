@@ -25,7 +25,7 @@ $result = $backup->setbackdir($backupdir)
     ->setvolsize(0.2)
     ->setonlystructure(false) //设置是否只备份目录结构
     ->settablelist(['md_menu', 'md_api_group','cmseasy_b_category']) //设置要备份的表， 默认全部表 
-    ->setstructuretable(['md_api_group'])
+    ->setstructuretable(['md_api_group']) //设置哪些表只备份结构不备份数据
     ->ajaxbackup($_POST);
 
 echo json_encode($result);
